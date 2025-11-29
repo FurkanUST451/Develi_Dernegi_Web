@@ -15,9 +15,10 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Title and Text are required' }, { status: 400 });
         }
 
-        // Add current date if missing
+        // Add current date if missing and map text to content
         const announcementData = {
             ...body,
+            content: body.text, // Map text to content
             date: new Date().toLocaleDateString('tr-TR'),
         };
 
@@ -40,8 +41,10 @@ export async function PUT(request: Request) {
         }
 
         // Update date to current on edit to bump to top if sorted by date
+        // Map text to content if present
         const updateData = {
             ...updates,
+            content: updates.text || updates.content, // Map text to content
             date: new Date().toLocaleDateString('tr-TR'),
         };
 
