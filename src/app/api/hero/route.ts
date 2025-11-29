@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getHeroSlides, addHeroSlide, deleteHeroSlide } from '@/lib/hero';
+import { revalidatePath } from 'next/cache';
 
 export async function GET() {
     const slides = await getHeroSlides();
@@ -16,6 +17,7 @@ export async function POST(request: Request) {
         }
 
         await addHeroSlide(imageUrl);
+        revalidatePath('/');
         return NextResponse.json({ success: true });
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -32,6 +34,7 @@ export async function DELETE(request: Request) {
         }
 
         await deleteHeroSlide(id);
+        revalidatePath('/');
         return NextResponse.json({ success: true });
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getPages, createPage } from '@/lib/storage';
+import { revalidatePath } from 'next/cache';
 
 export async function GET() {
     const pages = await getPages();
@@ -16,5 +17,6 @@ export async function POST(request: Request) {
         order: body.order || 0,
     };
     await createPage(newPage);
+    revalidatePath('/', 'layout');
     return NextResponse.json(newPage);
 }

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getAnnouncements, addAnnouncement, updateAnnouncement, deleteAnnouncement } from '@/lib/announcements';
+import { revalidatePath } from 'next/cache';
 
 export async function GET() {
     const items = await getAnnouncements();
@@ -14,6 +15,8 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Title and Text are required' }, { status: 400 });
         }
         await addAnnouncement(body);
+        revalidatePath('/');
+        revalidatePath('/duyurular');
         return NextResponse.json({ success: true });
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -30,6 +33,8 @@ export async function PUT(request: Request) {
         }
 
         await updateAnnouncement(id, updates);
+        revalidatePath('/');
+        revalidatePath('/duyurular');
         return NextResponse.json({ success: true });
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -46,6 +51,8 @@ export async function DELETE(request: Request) {
         }
 
         await deleteAnnouncement(id);
+        revalidatePath('/');
+        revalidatePath('/duyurular');
         return NextResponse.json({ success: true });
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { updateSettings } from '@/lib/settings';
+import { revalidatePath } from 'next/cache';
 
 export async function POST(request: Request) {
     try {
@@ -11,6 +12,7 @@ export async function POST(request: Request) {
         }
 
         await updateSettings({ logoUrl });
+        revalidatePath('/', 'layout'); // Revalidate everything since settings are global
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error('Error saving settings:', error);

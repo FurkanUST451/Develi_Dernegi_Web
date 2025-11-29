@@ -3,8 +3,9 @@ import AnnouncementsList from '../components/AnnouncementsList';
 
 export const metadata = {
     title: 'Duyurular - Develi ve Yöresi Kültür Dayanışma Derneği',
-    description: 'Derneğimizden en son haberler ve duyurular.',
 };
+
+export const dynamic = 'force-dynamic';
 
 export default async function AnnouncementsPage() {
     const announcements = await getAnnouncements();

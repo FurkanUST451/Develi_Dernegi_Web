@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getMembers, addMember, updateMember, deleteMember } from '@/lib/members';
+import { revalidatePath } from 'next/cache';
 
 export async function GET() {
     const items = await getMembers();
@@ -14,6 +15,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Name and Job are required' }, { status: 400 });
         }
         await addMember(body);
+        revalidatePath('/uyelerimiz');
         return NextResponse.json({ success: true });
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -30,6 +32,7 @@ export async function PUT(request: Request) {
         }
 
         await updateMember(id, updates);
+        revalidatePath('/uyelerimiz');
         return NextResponse.json({ success: true });
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -46,6 +49,7 @@ export async function DELETE(request: Request) {
         }
 
         await deleteMember(id);
+        revalidatePath('/uyelerimiz');
         return NextResponse.json({ success: true });
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
