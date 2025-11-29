@@ -25,7 +25,7 @@ const AnnouncementModel = mongoose.models.Announcement || mongoose.model('Announ
 
 export async function getAnnouncements(): Promise<Announcement[]> {
     await dbConnect();
-    const announcements = await AnnouncementModel.find({}).sort({ date: -1 }); // Sort by date descending
+    const announcements = await AnnouncementModel.find({}).sort({ updatedAt: -1 }); // Sort by last updated
     return announcements.map(doc => ({
         id: doc._id.toString(),
         title: doc.title,

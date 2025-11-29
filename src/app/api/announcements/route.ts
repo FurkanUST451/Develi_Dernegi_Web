@@ -14,7 +14,14 @@ export async function POST(request: Request) {
         if (!body.title || !body.text) {
             return NextResponse.json({ error: 'Title and Text are required' }, { status: 400 });
         }
-        await addAnnouncement(body);
+
+        // Add current date if missing
+        const announcementData = {
+            ...body,
+            date: new Date().toLocaleDateString('tr-TR'),
+        };
+
+        await addAnnouncement(announcementData);
         revalidatePath('/');
         revalidatePath('/duyurular');
         return NextResponse.json({ success: true });
@@ -32,7 +39,13 @@ export async function PUT(request: Request) {
             return NextResponse.json({ error: 'ID is required' }, { status: 400 });
         }
 
-        await updateAnnouncement(id, updates);
+        // Update date to current on edit to bump to top if sorted by date
+        const updateData = {
+            ...updates,
+            date: new Date().toLocaleDateString('tr-TR'),
+        };
+
+        await updateAnnouncement(id, updateData);
         revalidatePath('/');
         revalidatePath('/duyurular');
         return NextResponse.json({ success: true });
