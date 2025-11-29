@@ -1,66 +1,68 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import { getHeroSlides } from "@/lib/hero";
+import { getAnnouncements } from "@/lib/announcements";
+import { getSettings } from "@/lib/settings";
+import { getPages } from "@/lib/storage";
+import HeroSlider from "./components/HeroSlider";
+import AnnouncementSlider from "./components/AnnouncementSlider";
 
-export default function Home() {
+import FadeInSection from "./components/FadeInSection";
+
+export const dynamic = 'force-dynamic';
+
+export default async function Home() {
+  const heroSlides = await getHeroSlides();
+  const announcements = await getAnnouncements();
+  const settings = await getSettings();
+  const pages = await getPages();
+  const homePage = pages.find(p => p.slug === 'home');
+
+  // Helper for dots
+  const Dots = ({ reverse = false }) => (
+    <div style={{ display: 'flex', gap: '4px', flexDirection: reverse ? 'row-reverse' : 'row', alignItems: 'center' }}>
+      <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#ccc' }}></div>
+      <div style={{ width: '3px', height: '3px', borderRadius: '50%', background: '#ccc', opacity: 0.7 }}></div>
+      <div style={{ width: '2px', height: '2px', borderRadius: '50%', background: '#ccc', opacity: 0.4 }}></div>
+    </div>
+  );
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div>
+      <HeroSlider slides={heroSlides} heroText={settings.heroText} />
+
+      {homePage && homePage.content && (
+        <section className="container" style={{ marginTop: '3rem', marginBottom: '3rem' }}>
+          <div className="page-content" dangerouslySetInnerHTML={{ __html: homePage.content }} />
+        </section>
+      )}
+
+      <section className="container" style={{ marginTop: '3rem', marginBottom: '3rem' }}>
+        <FadeInSection>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'flex-end', maxWidth: '250px' }}>
+              <div style={{ height: '1px', background: '#ccc', flex: 1, margin: '0 1rem' }}></div>
+              <Dots reverse={false} />
+            </div>
+
+            <h2 className="section-title" style={{
+              fontSize: '2.5rem',
+              fontWeight: 700,
+              color: 'black',
+              fontFamily: "'Playfair Display', Georgia, 'Times New Roman', serif",
+              letterSpacing: '2px',
+              textTransform: 'uppercase',
+              margin: '0 1.5rem'
+            }}>
+              Son Haberler
+            </h2>
+
+            <div style={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'flex-start', maxWidth: '250px' }}>
+              <Dots reverse={true} />
+              <div style={{ height: '1px', background: '#ccc', flex: 1, margin: '0 1rem' }}></div>
+            </div>
+          </div>
+          <AnnouncementSlider announcements={announcements} />
+        </FadeInSection>
+      </section>
     </div>
   );
 }
