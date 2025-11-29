@@ -44,18 +44,6 @@ export default function AnnouncementsList({ announcements }: { announcements: An
                     <div className="card-content">
                         <h2 className="card-title">{item.title}</h2>
                         <p className="card-text">{item.text}</p>
-                        {item.link && (
-                            <span style={{
-                                color: '#000000',
-                                fontWeight: 600,
-                                fontSize: '0.9rem',
-                                marginTop: '1rem',
-                                display: 'inline-block',
-                                cursor: 'pointer'
-                            }}>
-                                Devamını Oku &rarr;
-                            </span>
-                        )}
                     </div>
                 </div>
             ))}
