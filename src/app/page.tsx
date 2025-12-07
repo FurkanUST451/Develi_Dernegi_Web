@@ -2,8 +2,10 @@ import { getHeroSlides } from "@/lib/hero";
 import { getAnnouncements } from "@/lib/announcements";
 import { getSettings } from "@/lib/settings";
 import { getPages } from "@/lib/storage";
+import { getSupporters } from "@/lib/supporters";
 import HeroSlider from "./components/HeroSlider";
 import AnnouncementSlider from "./components/AnnouncementSlider";
+import SupportersStrip from "./components/SupportersStrip";
 
 import FadeInSection from "./components/FadeInSection";
 
@@ -14,6 +16,7 @@ export default async function Home() {
   const announcements = await getAnnouncements();
   const settings = await getSettings();
   const pages = await getPages();
+  const supporters = await getSupporters();
   const homePage = pages.find(p => p.slug === 'home');
 
   // Helper for dots
@@ -34,6 +37,8 @@ export default async function Home() {
           <div className="page-content" dangerouslySetInnerHTML={{ __html: homePage.content }} />
         </section>
       )}
+
+      <SupportersStrip supporters={supporters} />
 
       <section className="container" style={{ marginTop: '3rem', marginBottom: '3rem' }}>
         <FadeInSection>
