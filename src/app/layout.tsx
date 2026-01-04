@@ -77,7 +77,7 @@ export default async function RootLayout({
           <div className="footer-column">
             <h3>Hızlı Erişim</h3>
             <nav className="footer-nav">
-              <Link href="/">Anasayfa</Link>
+
               {pages.sort((a, b) => a.order - b.order).map((page) => (
                 <Link key={page.id} href={`/${page.slug === 'home' ? '' : page.slug}`}>
                   {page.title}
